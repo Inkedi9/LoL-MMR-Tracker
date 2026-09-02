@@ -5,67 +5,73 @@
 > Objectif : construire un tracker fonctionnel capable de récupérer et présenter les données Riot.
 
 Riot API
-- [X] Riot Account API
-- [X] Summoner API
-- [X] League API
-- [X] Match-V5 API
-- [X] Recherche par Riot ID
-- [X] Récupération des matchs
-- [X] Parsing des données Riot
+
+- [x] Riot Account API
+- [x] Summoner API
+- [x] League API
+- [x] Match-V5 API
+- [x] Recherche par Riot ID
+- [x] Récupération des matchs
+- [x] Parsing des données Riot
 
 Profil
-- [X] Profil joueur
-- [X] Riot ID
-- [X] Niveau du compte
-- [X] Rang
-- [X] LP
-- [X] Winrate
-- [X] Wins / Losses
-- [X] Hot Streak
-- [X] Champion joué
+
+- [x] Profil joueur
+- [x] Riot ID
+- [x] Niveau du compte
+- [x] Rang
+- [x] LP
+- [x] Winrate
+- [x] Wins / Losses
+- [x] Hot Streak
+- [x] Champion joué
 
 Match History
-- [X] Historique des parties
-- [X] Victoire / défaite
-- [X] Durée
-- [X] KDA
-- [X] CS
-- [X] Gold
-- [X] Damage
-- [X] Vision
-- [X] Kill Participation
-- [X] Objectifs
-- [X] Icônes champions
-- [X] Match expandable
-- [X] Détails d'une partie
-- [X] Team Overview
-- [X] Joueurs des deux équipes
+
+- [x] Historique des parties
+- [x] Victoire / défaite
+- [x] Durée
+- [x] KDA
+- [x] CS
+- [x] Gold
+- [x] Damage
+- [x] Vision
+- [x] Kill Participation
+- [x] Objectifs
+- [x] Icônes champions
+- [x] Match expandable
+- [x] Détails d'une partie
+- [x] Team Overview
+- [x] Joueurs des deux équipes
 
 Premier moteur MMR
-- [X] Estimation MMR
-- [X] Fourchette MMR
-- [X] MMR probable
-- [X] Comparaison MMR / rang
-- [X] Jauge MMR
+
+- [x] Estimation MMR
+- [x] Fourchette MMR
+- [x] MMR probable
+- [x] Comparaison MMR / rang
+- [x] Jauge MMR
 
 Premier moteur Performance
-- [X] KDA Score
-- [X] CS Score
-- [X] Damage Score
-- [X] Kill Participation Score
-- [X] Vision Score
-- [X] Objective Score
-- [X] Score global
-- [X] Grade S+ → F
+
+- [x] KDA Score
+- [x] CS Score
+- [x] Damage Score
+- [x] Kill Participation Score
+- [x] Vision Score
+- [x] Objective Score
+- [x] Score global
+- [x] Grade S+ → F
 
 Dashboard
-- [X] /profile/[riotId]
-- [X] Profile Overview
-- [X] Performance Card
-- [X] MMR Card
-- [X] Match History
-- [X] Navigation interne
-- [X] Design dark / premium
+
+- [x] /profile/[riotId]
+- [x] Profile Overview
+- [x] Performance Card
+- [x] MMR Card
+- [x] Match History
+- [x] Navigation interne
+- [x] Design dark / premium
 
 Statut : 🟢 TERMINÉE
 
@@ -80,17 +86,19 @@ Statut : 🟢 TERMINÉE
 > Le moteur existe déjà, mais il faut maintenant le structurer proprement.
 
 Déjà fait
-- [X] Performance Score
-- [X] Grade
-- [X] KDA
-- [X] CS/min
-- [X] Damage/min
-- [X] Gold/min
-- [X] Vision/min
-- [X] Kill Participation
-- [X] Objectifs
+
+- [x] Performance Score
+- [x] Grade
+- [x] KDA
+- [x] CS/min
+- [x] Damage/min
+- [x] Gold/min
+- [x] Vision/min
+- [x] Kill Participation
+- [x] Objectifs
 
 À améliorer
+
 - [ ] Normalisation des scores
 - [ ] Gestion des valeurs extrêmes
 - [ ] Score différent selon le rôle
@@ -124,13 +132,15 @@ Consistency   81
 Le composant et le calcul de progression existent déjà.
 
 Déjà fait
-- [X] MMR moyen
-- [X] MMR progression
-- [X] Historique de progression
-- [X] Calcul par partie
-- [X] Composant MMRProgression
+
+- [x] MMR moyen
+- [x] MMR progression
+- [x] Historique de progression
+- [x] Calcul par partie
+- [x] Composant MMRProgression
 
 À améliorer
+
 - [ ] Graphique réellement exploitable
 - [ ] MMR avant / après chaque partie
 - [ ] Tendance
@@ -165,18 +175,20 @@ Confidence    78%
 La base est déjà présente dans MatchDetails.
 
 Déjà fait
-- [X] KDA
-- [X] CS
-- [X] Gold
-- [X] Damage
-- [X] Vision
-- [X] Objectives
-- [X] KP
-- [X] Performance Score
-- [X] Performance Grade
-- [X] Team Overview
+
+- [x] KDA
+- [x] CS
+- [x] Gold
+- [x] Damage
+- [x] Vision
+- [x] Objectives
+- [x] KP
+- [x] Performance Score
+- [x] Performance Grade
+- [x] Team Overview
 
 À ajouter
+
 - [ ] Early / Mid / Late game
 - [ ] Teamfight participation
 - [ ] Gold advantage
@@ -200,6 +212,7 @@ Fizz       12 games   58% WR
 ```
 
 Features
+
 - [ ] Champions les plus joués
 - [ ] Winrate par champion
 - [ ] KDA par champion
@@ -231,6 +244,7 @@ Confidence: 82%
 ```
 
 Features
+
 - [ ] Détection du rôle
 - [ ] Pourcentage par rôle
 - [ ] Performance par rôle
@@ -259,6 +273,7 @@ Actuellement
 ```
 
 À finaliser
+
 - [ ] Navigation sticky
 - [ ] Sections mieux séparées
 - [ ] Responsive mobile
@@ -308,6 +323,7 @@ CONSISTENCY
 Une fois toutes les données disponibles, on améliore le modèle.
 
 V1
+
 ```
 Rank
 +
@@ -319,6 +335,7 @@ Performance
 ```
 
 V2
+
 ```
 Rank
 LP
@@ -333,6 +350,7 @@ Recent form
 ```
 
 Features
+
 - [ ] Modèle MMR amélioré
 - [ ] Pondération dynamique
 - [ ] Recent form
@@ -360,6 +378,7 @@ Features
 ```
 
 Dimensions
+
 - ⚔️ Combat
 - 🧠 Macro
 - 💰 Economy
@@ -367,6 +386,7 @@ Dimensions
 - 🤝 Team
 
 Features
+
 - [ ] Calcul du DNA
 - [ ] Profil de jeu
 - [ ] Forces
@@ -405,6 +425,7 @@ Ton principal axe d'amélioration semble
 On ajoute le contexte de la partie.
 
 Match Difficulty
+
 ```
 EASY
 ████░░░░░░
@@ -417,6 +438,7 @@ HARD
 ```
 
 Analyse
+
 - [ ] Rang moyen des adversaires
 - [ ] Niveau moyen des joueurs
 - [ ] Performance selon niveau adverse
@@ -552,6 +574,7 @@ BIGGEST IMPROVEMENT
 ```
 
 Features produit
+
 - [ ] Comptes utilisateurs
 - [ ] Sauvegarde historique
 - [ ] Plusieurs comptes LoL
@@ -589,8 +612,10 @@ V6 Product
 
 Et surtout, le dernier npm run build passe entièrement :
 
+```
 ✓ Compiled successfully
 ✓ Finished TypeScript
 ✓ Collecting page data
 ✓ Generating static pages
 ✓ Finalizing page optimization
+```

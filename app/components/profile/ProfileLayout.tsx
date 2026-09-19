@@ -114,7 +114,7 @@ export default function ProfileLayout({
 
     return (
 
-        <div className="mx-auto flex w-full max-w-7xl gap-8">
+        <div className="mx-auto flex w-full max-w-7xl gap-8 pt-32">
 
             {/* Sidebar */}
 

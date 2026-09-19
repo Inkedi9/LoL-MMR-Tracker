@@ -3,21 +3,38 @@ import type {
     MatchParticipant,
     MatchTeam,
 } from "../../types/riot";
-import {
-    calculateMatchPerformance,
-} from "../analysis/performance";
-
+import { calculateMatchPerformance } from "../analysis/performance";
 
 export function parseMatch(
     match: any,
     puuid: string
 ): MatchResult {
+    // --------------------------------------------------
+    // Validation des données Riot
+    // --------------------------------------------------
 
-    const player =
-        match.info.participants.find(
-            (p: any) => p.puuid === puuid
+    if (!match?.info?.participants) {
+        throw new Error(
+            "Invalid match data: participants not found"
         );
+    }
 
+    const participants = match.info.participants;
+
+    if (participants.length !== 10) {
+        throw new Error(
+            `Invalid match data: expected 10 participants, got ${participants.length}`
+        );
+    }
+
+    // --------------------------------------------------
+    // Joueur analysé
+    // --------------------------------------------------
+
+    const player = participants.find(
+        (participant: any) =>
+            participant.puuid === puuid
+    );
 
     if (!player) {
         throw new Error(
@@ -25,106 +42,101 @@ export function parseMatch(
         );
     }
 
+    // --------------------------------------------------
+    // Durée
+    // --------------------------------------------------
 
-    // Durée de la partie en secondes
+    const duration = Math.max(
+        Number(match.info.gameDuration) || 0,
+        0
+    );
 
-    const duration =
-        match.info.gameDuration;
+    const minutes = duration / 60;
 
-
-    // Durée en minutes
-
-    const minutes =
-        duration / 60;
-
-
+    // --------------------------------------------------
     // KDA
+    // --------------------------------------------------
 
     const kda =
         (
             player.kills +
             player.assists
-        )
-        /
+        ) /
         Math.max(player.deaths, 1);
 
-
-    // CS total
+    // --------------------------------------------------
+    // CS
+    // --------------------------------------------------
 
     const cs =
-        player.totalMinionsKilled +
-        player.neutralMinionsKilled;
-
-
-    // CS / minute
+        (Number(player.totalMinionsKilled) || 0) +
+        (Number(player.neutralMinionsKilled) || 0);
 
     const csPerMinute =
         minutes > 0
             ? cs / minutes
             : 0;
 
-
+    // --------------------------------------------------
     // Gold
+    // --------------------------------------------------
 
     const gold =
-        player.goldEarned;
-
-
-    // Gold / minute
+        Number(player.goldEarned) || 0;
 
     const goldPerMinute =
         minutes > 0
             ? gold / minutes
             : 0;
 
-
-    // Damage aux champions
+    // --------------------------------------------------
+    // Damage
+    // --------------------------------------------------
 
     const damage =
-        player.totalDamageDealtToChampions;
-
-
-    // Damage / minute
+        Number(
+            player.totalDamageDealtToChampions
+        ) || 0;
 
     const damagePerMinute =
         minutes > 0
             ? damage / minutes
             : 0;
 
-
+    // --------------------------------------------------
     // Vision
+    // --------------------------------------------------
 
     const visionScore =
-        player.visionScore;
-
-
-    // Vision / minute
+        Number(player.visionScore) || 0;
 
     const visionPerMinute =
         minutes > 0
             ? visionScore / minutes
             : 0;
 
+    // --------------------------------------------------
+    // Team kills
+    // --------------------------------------------------
 
-    // Kills de l'équipe
+    const teamKills = participants
+        .filter(
+            (participant: any) =>
+                participant.teamId === player.teamId
+        )
+        .reduce(
+            (
+                total: number,
+                participant: any
+            ) =>
+                total +
+                (Number(participant.kills) || 0),
+            0
+        );
 
-    const teamKills =
-        match.info.participants
-            .filter(
-                (p: any) =>
-                    p.teamId === player.teamId
-            )
-            .reduce(
-                (
-                    total: number,
-                    p: any
-                ) =>
-                    total + p.kills,
-                0
-            );
-
-
+    // --------------------------------------------------
     // Kill Participation
+    // --------------------------------------------------
 
     const killParticipation =
         teamKills > 0
@@ -134,52 +146,150 @@ export function parseMatch(
             ) / teamKills
             : 0;
 
-
+    // --------------------------------------------------
     // Objectifs
+    // --------------------------------------------------
 
     const baronKills =
-        player.baronKills ?? 0;
-
+        Number(player.baronKills) || 0;
 
     const dragonKills =
-        player.dragonKills ?? 0;
-
+        Number(player.dragonKills) || 0;
 
     const turretKills =
-        player.turretKills ?? 0;
+        Number(player.turretKills) || 0;
 
+    // --------------------------------------------------
+    // Teams
+    // --------------------------------------------------
+
+    const teams: MatchTeam[] =
+        [100, 200].map((teamId) => {
+            const teamPlayers: MatchParticipant[] =
+                participants
+                    .filter(
+                        (participant: any) =>
+                            participant.teamId === teamId
+                    )
+                    .map(
+                        (participant: any) => ({
+                            puuid: participant.puuid,
+                            champion:
+                                participant.championName,
+                            kills:
+                                Number(
+                                    participant.kills
+                                ) || 0,
+                            deaths:
+                                Number(
+                                    participant.deaths
+                                ) || 0,
+                            assists:
+                                Number(
+                                    participant.assists
+                                ) || 0,
+                            win:
+                                Boolean(
+                                    participant.win
+                                ),
+                        })
+                    );
+
+            const teamWon =
+                teamPlayers.some(
+                    (participant) =>
+                        participant.win
+                );
+
+            return {
+                teamId,
+                win: teamWon,
+                players: teamPlayers,
+            };
+        });
+
+    // --------------------------------------------------
+    // Résultat de base
+    // --------------------------------------------------
 
     const result: MatchResult = {
-        matchId: match.metadata.matchId,
-        champion: player.championName,
-        win: player.win,
-        puuid: player.puuid,
-        kills: player.kills,
-        deaths: player.deaths,
-        assists: player.assists,
-        kda: Number(kda.toFixed(2)),
+        matchId:
+            match.metadata.matchId,
+
+        champion:
+            player.championName,
+
+        win:
+            Boolean(player.win),
+
+        puuid:
+            player.puuid,
+
+        kills:
+            Number(player.kills) || 0,
+
+        deaths:
+            Number(player.deaths) || 0,
+
+        assists:
+            Number(player.assists) || 0,
+
+        kda:
+            Number(kda.toFixed(2)),
+
         duration,
+
         cs,
-        csPerMinute: Number(csPerMinute.toFixed(2)),
+
+        csPerMinute:
+            Number(
+                csPerMinute.toFixed(2)
+            ),
+
         gold,
-        goldPerMinute: Number(goldPerMinute.toFixed(2)),
+
+        goldPerMinute:
+            Number(
+                goldPerMinute.toFixed(2)
+            ),
+
         damage,
-        damagePerMinute: Number(damagePerMinute.toFixed(2)),
+
+        damagePerMinute:
+            Number(
+                damagePerMinute.toFixed(2)
+            ),
+
         visionScore,
-        visionPerMinute: Number(visionPerMinute.toFixed(2)),
+
+        visionPerMinute:
+            Number(
+                visionPerMinute.toFixed(2)
+            ),
+
         teamKills,
-        killParticipation: Number(
-            killParticipation.toFixed(3)
-        ),
+
+        killParticipation:
+            Number(
+                killParticipation.toFixed(3)
+            ),
+
         baronKills,
         dragonKills,
         turretKills,
+
         performanceScore: 0,
         performanceGrade: "F",
-        teams: [],
+
+        teams,
     };
 
-    const performance = calculateMatchPerformance(match);
+    // --------------------------------------------------
+    // Performance
+    // --------------------------------------------------
+
+    const performance =
+        calculateMatchPerformance(result);
 
     result.performanceScore =
         performance.score;
@@ -187,32 +297,5 @@ export function parseMatch(
     result.performanceGrade =
         performance.grade;
 
-
-    const teams: MatchTeam[] = [100, 200].map((teamId) => {
-        const teamPlayers = match.info.participants
-            .filter((p: any) => p.teamId === teamId)
-            .map((p: any) => ({
-                puuid: p.puuid,
-                champion: p.championName,
-                kills: p.kills,
-                deaths: p.deaths,
-                assists: p.assists,
-                win: p.win,
-            }));
-
-        const teamWon = teamPlayers.some(
-            (player: MatchParticipant) => player.win
-        );
-
-        return {
-            teamId,
-            win: teamWon,
-            players: teamPlayers,
-        };
-    });
-
-    result.teams = teams;
-
     return result;
-
 }

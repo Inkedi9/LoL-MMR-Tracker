@@ -114,22 +114,31 @@ export default function ProfileLayout({
 
     return (
 
-        <div className="mx-auto flex w-full max-w-7xl gap-8 pt-32">
+        <div className="min-h-screen w-full lg:flex">
 
             {/* Sidebar */}
 
             <aside className="
                 hidden
-                w-56
                 shrink-0
+                lg:sticky
+                lg:top-0
                 lg:block
+                lg:h-screen
+                lg:w-64
+                lg:pt-28
+                lg:pb-6
+                lg:pr-6
             ">
 
                 <div className="
-                    sticky
-                    top-24
-                    rounded-2xl
+                    flex
+                    h-full
+                    flex-col
+                    overflow-y-auto
+                    rounded-r-3xl
                     border
+                    border-l-0
                     border-zinc-800
                     bg-zinc-900/60
                     p-3
@@ -210,7 +219,7 @@ export default function ProfileLayout({
 
             {/* Content */}
 
-            <main className="min-w-0 flex-1">
+            <main className="min-w-0 flex-1 px-4 pb-12 pt-28 sm:px-6 lg:pr-8 xl:pr-10">
                 {children}
             </main>
 

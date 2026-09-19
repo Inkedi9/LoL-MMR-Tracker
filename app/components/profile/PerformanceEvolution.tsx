@@ -24,7 +24,7 @@ export default function PerformanceEvolution({
     const data = getEvolutionData(matches);
 
     return (
-        <section className="w-full max-w-5xl">
+        <section className="w-full">
 
             <div className="mb-6">
                 <h2 className="text-2xl font-bold text-white">

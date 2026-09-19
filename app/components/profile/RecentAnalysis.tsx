@@ -31,7 +31,7 @@ export default function RecentAnalysis({
 
 
     return (
-        <section className="w-full max-w-5xl">
+        <section className="w-full">
 
             <div className="mb-6">
 
